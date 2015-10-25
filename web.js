@@ -80,21 +80,6 @@ app.route(/^\/[0-9A-Za-z-]+\/[0-9a-f]+\/raw\/?/)
         middleware.proxyPath('https://gist.githubusercontent.com')
     );
 
-// Repo file.
-app.route('/:user/:repo/:branch/*')
-    .all(
-        middleware.cdn,
-        middleware.stats,
-        middleware.security,
-        middleware.noRobots,
-        middleware.autoThrottle,
-        middleware.accessControl
-    )
-    .get(
-        middleware.fileRedirect('https://raw.githubusercontent.com'),
-        middleware.proxyPath('https://raw.githubusercontent.com')
-    );
-
 // Stats API.
 app.get('/api/stats', function (req, res) {
     var count = Math.max(0, Math.min(20, req.query.count || 10));
@@ -111,6 +96,21 @@ app.get('/api/stats', function (req, res) {
         }
     });
 });
+
+// Repo file.
+app.route('/*')
+    .all(
+        middleware.cdn,
+        middleware.stats,
+        middleware.security,
+        middleware.noRobots,
+        middleware.autoThrottle,
+        middleware.accessControl
+    )
+    .get(
+        middleware.fileRedirect('https://raw.githubusercontent.com'),
+        middleware.proxyPath('https://raw.githubusercontent.com')
+    );
 
 // -- Error handlers -----------------------------------------------------------
 app.use(function (req, res) {

@@ -24,6 +24,21 @@ Installing
 5. Browse to <http://localhost:5000/> and you should see RawGit in action.
 
 
+Wildcard Domain Setup
+---------------------
+
+To use subdomain routing locally, use `dnsmasq`
+
+        brew install dnsmasq
+        cd $(brew --prefix)
+        mkdir etc
+        echo 'address=/.dev/127.0.0.1' > etc/dnsmasq.conf
+        sudo cp -v $(brew --prefix dnsmasq)/homebrew.mxcl.dnsmasq.plist /Library/LaunchDaemons
+        sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+        sudo mkdir /etc/resolver
+        sudo bash -c 'echo "nameserver 127.0.0.1" > /etc/resolver/dev'
+
+
 Running Tests
 -------------
 
